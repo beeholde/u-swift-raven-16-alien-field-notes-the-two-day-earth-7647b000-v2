@@ -1,26 +1,32 @@
-"""Alien Field Notes entry v2: write one alien tourist's review of Earth to /output/entry.txt.
+"""Alien Field Notes, second entry: an alien tourist reviews planet Earth.
 
-Stdlib only, no network, deterministic: the same bytes on every run.
-The review is a single line, 102 characters, one joke, punchline at the end.
+One line, 102 characters, a single joke with the punch at the end.
+Standard library only, no network, the same bytes on every run.
 """
 
 import os
-from pathlib import Path
 
-LINE = "The locals throw tomatoes at each other for fun and call it a festival. Four stars; I brought a salad."
-# Entry line: 102 characters, one joke, punch ("I brought a salad") at the end.
+REVIEW = "The locals throw tomatoes at each other for fun and call it a festival. Four stars; I brought a salad."
+# The review: 102 characters, one joke, punch ("I brought a salad") at the end.
 
-MAX_CHARS = 200  # gate: entry.txt must hold 1-200 characters of UTF-8 text
-# Output is written with write_bytes: no trailing newline, exactly 102 chars.
+LIMIT = 200  # the gate allows 1-200 characters of UTF-8 text
 
 
-def main() -> None:
-    text = LINE
-    assert 1 <= len(text) <= MAX_CHARS, f"line is {len(text)} chars, gate is 1-200"
-    out = Path(os.environ.get("ENTRY_OUTPUT", "/output/entry.txt"))
-    out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_bytes(text.encode("utf-8"))
-    os.chmod(out, 0o644)
+def review_text():
+    line = REVIEW
+    if not 1 <= len(line) <= LIMIT:
+        raise ValueError("review is %d chars; gate is 1-200" % len(line))
+    return line
+
+
+def main():
+    target = os.environ.get("ENTRY_OUTPUT", "/output/entry.txt")
+    folder = os.path.dirname(target)
+    if folder:
+        os.makedirs(folder, exist_ok=True)
+    with open(target, "wb") as handle:
+        handle.write(review_text().encode("utf-8"))
+    os.chmod(target, 0o644)
 
 
 if __name__ == "__main__":
