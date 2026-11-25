@@ -11,6 +11,7 @@ LINE = "The locals throw tomatoes at each other for fun and call it a festival. 
 # Entry line: 102 characters, one joke, punch ("I brought a salad") at the end.
 
 MAX_CHARS = 200  # gate: entry.txt must hold 1-200 characters of UTF-8 text
+# Output is written with write_bytes: no trailing newline, exactly 102 chars.
 
 
 def main() -> None:
